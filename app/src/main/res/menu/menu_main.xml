@@ -13,16 +13,16 @@
         android:orderInCategory="200"
         app:showAsAction="never" />
 
-    <item android:id="@+id/item_pesquisa"
-        android:title="Pesquisa"
-        android:orderInCategory="300"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_search"/>
-
     <item android:id="@+id/item_adicionar"
         android:title="Adicionar"
-        android:orderInCategory="400"
+        android:orderInCategory="300"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_add"/>
+
+    <item android:id="@+id/item_adicionar_pessoa"
+        android:title="Adicionar Pessoa"
+        android:orderInCategory="400"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_person_add"/>
 
 </menu>

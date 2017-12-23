@@ -1,6 +1,7 @@
 package champions.myapp.com.campeonatinho.activity.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,10 +23,11 @@ import java.util.ArrayList;
 
 import champions.myapp.com.campeonatinho.R;
 import champions.myapp.com.campeonatinho.activity.CampeonatoActivity;
+import champions.myapp.com.campeonatinho.activity.ParticipantesActivity;
 import champions.myapp.com.campeonatinho.adapter.CampeonatoAdapter;
-import champions.myapp.com.campeonatinho.config.ConfiguracaoFirebase;
 import champions.myapp.com.campeonatinho.helper.Preferencias;
 import champions.myapp.com.campeonatinho.model.Campeonato;
+import champions.myapp.com.campeonatinho.model.enuns.TituloAbas;
 import champions.myapp.com.campeonatinho.service.CampeonatoService;
 
 /**
@@ -38,9 +40,15 @@ public class CampeonatoFragment extends Fragment {
     private ArrayList<Campeonato> campeonatoes = new ArrayList<>();
     private DatabaseReference firebase;
     private ValueEventListener contatosEvent;
+    private TituloAbas tituloAba;
 
     public CampeonatoFragment() {
         // Required empty public constructor
+    }
+
+    @SuppressLint("ValidFragment")
+    public CampeonatoFragment(TituloAbas tituloAba) {
+        this.tituloAba = tituloAba;
     }
 
     @Override
@@ -77,8 +85,12 @@ public class CampeonatoFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), CampeonatoActivity.class);
-
+                Intent intent = null;
+                if(TituloAbas.PARTICIPANTES == tituloAba){
+                    intent = new Intent(getActivity(), ParticipantesActivity.class);
+                } else if(TituloAbas.CAMPEONATO == tituloAba){
+                    intent = new Intent(getActivity(), CampeonatoActivity.class);
+                }
                 Campeonato campeonato = campeonatoes.get(position);
                 intent.putExtra("nome", campeonato.getNome());
                 intent.putExtra("campeonatoId", campeonato.getId());

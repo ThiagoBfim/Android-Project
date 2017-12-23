@@ -1,11 +1,9 @@
 package champions.myapp.com.campeonatinho.activity.view;
 
 import android.content.Context;
-import android.view.ContextMenu;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import champions.myapp.com.campeonatinho.activity.CampeonatoActivity;
 import champions.myapp.com.campeonatinho.model.Pontuacao;
 
 /**

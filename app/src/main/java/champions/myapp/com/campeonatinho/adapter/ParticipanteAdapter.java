@@ -12,18 +12,18 @@ import android.widget.TextView;
 import java.util.List;
 
 import champions.myapp.com.campeonatinho.R;
-import champions.myapp.com.campeonatinho.model.Pontuacao;
+import champions.myapp.com.campeonatinho.model.UsuarioPontuacao;
 
 /**
  * Created by Usuario on 15/12/2017.
  */
 
-public class PontuacaoAdapter extends ArrayAdapter<Pontuacao> {
+public class ParticipanteAdapter extends ArrayAdapter<UsuarioPontuacao> {
 
-    private List<Pontuacao> mensagens;
+    private List<UsuarioPontuacao> mensagens;
     private Context context;
 
-    public PontuacaoAdapter(@NonNull Context context, @NonNull List<Pontuacao> objects) {
+    public ParticipanteAdapter(@NonNull Context context, @NonNull List<UsuarioPontuacao> objects) {
         super(context, 0, objects);
         this.mensagens = objects;
         this.context = context;
@@ -36,16 +36,16 @@ public class PontuacaoAdapter extends ArrayAdapter<Pontuacao> {
 
         if (mensagens != null) {
 
-            Pontuacao ponto = mensagens.get(position);
+            UsuarioPontuacao ponto = mensagens.get(position);
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
             view = inflater.inflate(R.layout.lista_pontos, parent, false);
 
             TextView pontoDescricao = (TextView) view.findViewById(R.id.tv_title);
-            pontoDescricao.setText(ponto.getDescricao());
+            pontoDescricao.setText(ponto.getUsuario().getNome());
 
             TextView qtdPonto = (TextView) view.findViewById(R.id.tv_subTtitle);
-            qtdPonto.setText(String.valueOf(ponto.getQtdPontos()));
+            qtdPonto.setText(String.valueOf(ponto.getQtdTotalPontos()));
 
         }
 

@@ -15,21 +15,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.Base64;
 
 import champions.myapp.com.campeonatinho.R;
 import champions.myapp.com.campeonatinho.adapter.TabAdapter;
 import champions.myapp.com.campeonatinho.config.ConfiguracaoFirebase;
-import champions.myapp.com.campeonatinho.helper.Base64Util;
 import champions.myapp.com.campeonatinho.helper.Preferencias;
 import champions.myapp.com.campeonatinho.helper.SlidingTabLayout;
 import champions.myapp.com.campeonatinho.model.Campeonato;
-import champions.myapp.com.campeonatinho.model.Usuario;
 import champions.myapp.com.campeonatinho.service.CampeonatoService;
 
 public class MainActivity extends AppCompatActivity {
@@ -69,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+
+        MenuItem item = menu.findItem(R.id.item_adicionar_pessoa);
+        item.setVisible(false);
+
         return true;
     }
 

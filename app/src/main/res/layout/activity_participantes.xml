@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="champions.myapp.com.campeonatinho.activity.CampeonatoActivity"
+    tools:context="champions.myapp.com.campeonatinho.activity.ParticipantesActivity"
     android:orientation="vertical">
 
     <include android:id="@+id/toolbar"
@@ -13,8 +13,6 @@
         android:id="@+id/lv_conversas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"></ListView>
-
-
+        android:padding="8dp"></ListView>>
 
 </LinearLayout>
