@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "135242686706",
+    "firebase_url": "https://campeonatinho-league.firebaseio.com",
+    "project_id": "campeonatinho-league",
+    "storage_bucket": "campeonatinho-league.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:135242686706:android:aa455cf13cf8a99b",
+        "android_client_info": {
+          "package_name": "champions.myapp.com.campeonatinho"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "135242686706-34kp21reoacein80asgi9dvdlspqt08d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_kv8N9osbXkMYE1jzysFBbqZC4v6UsxA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

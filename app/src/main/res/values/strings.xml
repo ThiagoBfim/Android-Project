@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Campeonatinho</string>
+    <string name="digite_email">Digite seu e-mail</string>
+    <string name="digite_senha">Digite a sua Senha</string>
+    <string name="botao_logar">Logar</string>
+    <string name="texto_cadastre">Não tem conta? Cadastre-se</string>
+    <string name="botao_cadastrar">Cadastrar</string>
+    <string name="digite_nome">Digite seu nome</string>
+    <string name="item_configuracoes">Configurações</string>
+    <string name="item_sair">Sair</string>
+</resources>
