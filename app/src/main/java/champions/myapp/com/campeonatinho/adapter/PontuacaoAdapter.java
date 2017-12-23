@@ -45,7 +45,7 @@ public class PontuacaoAdapter extends ArrayAdapter<Pontuacao> {
             pontoDescricao.setText(ponto.getDescricao());
 
             TextView qtdPonto = (TextView) view.findViewById(R.id.tv_subTtitle);
-            qtdPonto.setText(String.valueOf(ponto.getQtdPontos()));
+            qtdPonto.setText(String.valueOf(ponto.getQtdPontosFixo()));
 
         }
 

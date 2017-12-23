@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +26,7 @@ import champions.myapp.com.campeonatinho.R;
 import champions.myapp.com.campeonatinho.activity.CampeonatoActivity;
 import champions.myapp.com.campeonatinho.activity.ParticipantesActivity;
 import champions.myapp.com.campeonatinho.adapter.CampeonatoAdapter;
+import champions.myapp.com.campeonatinho.config.ConfiguracaoFirebase;
 import champions.myapp.com.campeonatinho.helper.Preferencias;
 import champions.myapp.com.campeonatinho.model.Campeonato;
 import champions.myapp.com.campeonatinho.model.enuns.TituloAbas;
@@ -79,7 +81,6 @@ public class CampeonatoFragment extends Fragment {
         Preferencias preferencias = new Preferencias(getActivity());
         String identificadorLogado = preferencias.getIdentificador();
         firebase = CampeonatoService.getCampeonatosDataBaseReference(identificadorLogado);
-
         contatosEvent = getValueContatoEventListener();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

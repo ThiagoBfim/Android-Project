@@ -33,7 +33,7 @@ public class PontuacaoLayout extends LinearLayout {
 
         if(pontuacao != null){
             descricaoText.setText(pontuacao.getDescricao());
-            pontuacaoText.setText(String.valueOf(pontuacao.getQtdPontos()));
+            pontuacaoText.setText(String.valueOf(pontuacao.getQtdPontosFixo()));
         }
 
     }

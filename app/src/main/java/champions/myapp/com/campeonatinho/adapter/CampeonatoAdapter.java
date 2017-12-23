@@ -38,11 +38,11 @@ public class CampeonatoAdapter extends ArrayAdapter<Campeonato> {
             Campeonato contato = contatos.get(position);
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
-            view = inflater.inflate(R.layout.lista_campeonato, parent, false);
-            TextView nomeContato = (TextView) view.findViewById(R.id.tv_nome);
+            view = inflater.inflate(R.layout.lista_pontos, parent, false);
+            TextView nomeContato = (TextView) view.findViewById(R.id.tv_title);
             nomeContato.setText(contato.getNome());
 
-            TextView emailContato = (TextView) view.findViewById(R.id.tv_email);
+            TextView emailContato = (TextView) view.findViewById(R.id.tv_subTtitle);
             emailContato.setText(contato.getNome());
 
 

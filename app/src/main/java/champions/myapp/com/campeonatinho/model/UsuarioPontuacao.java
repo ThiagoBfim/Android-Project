@@ -1,5 +1,6 @@
 package champions.myapp.com.campeonatinho.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ public class UsuarioPontuacao {
 
     private String id;
     private Usuario usuario;
-    private List<Pontuacao> pontuacoes;
+    private List<Pontuacao> pontuacoes = new ArrayList<>();
     private Integer qtdTotalPontos = 0;
 
     public UsuarioPontuacao() {
@@ -41,6 +42,10 @@ public class UsuarioPontuacao {
     }
 
     public Integer getQtdTotalPontos() {
+        qtdTotalPontos = 0;
+        for(Pontuacao p : pontuacoes){
+            qtdTotalPontos += p.getQtdPontosFixo() * p.getQtdPontos();
+        }
         return qtdTotalPontos;
     }
 

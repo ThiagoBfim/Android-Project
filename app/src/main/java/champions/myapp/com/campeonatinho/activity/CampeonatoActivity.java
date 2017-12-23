@@ -32,6 +32,7 @@ import champions.myapp.com.campeonatinho.adapter.PontuacaoAdapter;
 import champions.myapp.com.campeonatinho.config.ConfiguracaoFirebase;
 import champions.myapp.com.campeonatinho.model.Pontuacao;
 import champions.myapp.com.campeonatinho.service.PontuacaoService;
+import champions.myapp.com.campeonatinho.service.UsuarioPontuacaoService;
 
 public class CampeonatoActivity extends AppCompatActivity {
 
@@ -126,13 +127,20 @@ public class CampeonatoActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(CampeonatoActivity.this);
 
         //Configurações do Dialog
-        alertDialog.setTitle("Nova Pontuação");
+        String labelButton;
+        if(pontuacao == null){
+            alertDialog.setTitle("Nova Pontuação");
+            labelButton = "Cadastrar";
+        } else {
+            alertDialog.setTitle("Editar Pontuação");
+            labelButton = "Salvar";
+        }
         final PontuacaoLayout pontuacaoView = new PontuacaoLayout(CampeonatoActivity.this, pontuacao);
         alertDialog.setView(pontuacaoView);
         alertDialog.setCancelable(false);
 
         //Configura botões
-        alertDialog.setPositiveButton("Cadastrar", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton(labelButton, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -145,23 +153,24 @@ public class CampeonatoActivity extends AppCompatActivity {
                 }else{
                     if(qtdPontosText.isEmpty()){
                         Toast.makeText(CampeonatoActivity.this, "Preencha a quantidade de pontos", Toast.LENGTH_LONG).show();
-                    }
-                    Integer qtdPontos = 0;
-                    try{
-                        qtdPontos = Integer.valueOf(qtdPontosText);
-                    } catch (NumberFormatException e){
-                        Log.e("Erro ao criar pontuacao", e.getMessage());
-                        Toast.makeText(CampeonatoActivity.this, "Quantidade de pontos precisa ser numerica.", Toast.LENGTH_LONG).show();
-                    }
-                    //Salvar instância Firebase
-                    Pontuacao pontuacaoNova = new Pontuacao();
-                    pontuacaoNova.setDescricao(descricaoPontuacao);
-                    pontuacaoNova.setQtdPontos(qtdPontos);
-                    if(pontuacao != null){
-                        pontuacaoNova.setId(pontuacao.getId());
-                        PontuacaoService.alterar(pontuacaoNova, idCampeonato);
                     } else {
-                        PontuacaoService.salvar(pontuacaoNova, idCampeonato);
+                        Integer qtdPontos = 0;
+                        try {
+                            qtdPontos = Integer.valueOf(qtdPontosText);
+                        } catch (NumberFormatException e) {
+                            Log.e("Erro ao criar pontuacao", e.getMessage());
+                            Toast.makeText(CampeonatoActivity.this, "Quantidade de pontos precisa ser numerica.", Toast.LENGTH_LONG).show();
+                        }
+                        //Salvar instância Firebase
+                        Pontuacao pontuacaoNova = new Pontuacao();
+                        pontuacaoNova.setDescricao(descricaoPontuacao);
+                        pontuacaoNova.setQtdPontosFixo(qtdPontos);
+                        if (pontuacao != null) {
+                            pontuacaoNova.setId(pontuacao.getId());
+                            PontuacaoService.alterar(pontuacaoNova, idCampeonato);
+                        } else {
+                            PontuacaoService.salvar(pontuacaoNova, idCampeonato);
+                        }
                     }
 
                 }
@@ -174,6 +183,7 @@ public class CampeonatoActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     PontuacaoService.remover(pontuacao, idCampeonato);
+                    UsuarioPontuacaoService.removerPontuacao(pontuacao, idCampeonato);
                 }
             });
         }

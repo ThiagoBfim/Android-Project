@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import champions.myapp.com.campeonatinho.R;
+import champions.myapp.com.campeonatinho.activity.view.ParticipanteLayout;
+import champions.myapp.com.campeonatinho.activity.view.PontuacaoLayout;
 import champions.myapp.com.campeonatinho.adapter.ParticipanteAdapter;
 import champions.myapp.com.campeonatinho.config.ConfiguracaoFirebase;
 import champions.myapp.com.campeonatinho.helper.Base64Util;
@@ -126,19 +128,25 @@ public class ParticipantesActivity extends AppCompatActivity {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(ParticipantesActivity.this);
 
+        String labelButton;
         //Configurações do Dialog
-        alertDialog.setTitle("Novo participante");
-        alertDialog.setMessage("E-mail do participante");
+        if(usuarioPontuacao == null) {
+            labelButton = "Cadastrar";
+            alertDialog.setTitle("Novo participante");
+        } else {
+            alertDialog.setTitle("Editar participante");
+            labelButton = "Salvar";
+        }
+        final ParticipanteLayout participanteLayout = new ParticipanteLayout(ParticipantesActivity.this, usuarioPontuacao, idCampeonato);
+        alertDialog.setView(participanteLayout);
         alertDialog.setCancelable(false);
-        final EditText editText = new EditText(ParticipantesActivity.this);
-        alertDialog.setView( editText );
 
         //Configura botões
-        alertDialog.setPositiveButton("Cadastrar", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton(labelButton, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                String emailParticipante = editText.getText().toString();
+                String emailParticipante = participanteLayout.getNomeText().getText().toString();
 
                 //Valida se o nome foi digitado
                 if (emailParticipante.isEmpty()) {
@@ -159,11 +167,15 @@ public class ParticipantesActivity extends AppCompatActivity {
                                 //Recuperar dados do contato a ser adicionado
                                 Usuario usuario = dataSnapshot.getValue(Usuario.class);
 
-                                //Recuperar identificador usuario logado (base64)
-                                UsuarioPontuacao usuarioPontuacao = new UsuarioPontuacao();
-                                usuarioPontuacao.setUsuario(usuario);
 
-                                UsuarioPontuacaoService.salvar(usuarioPontuacao, idCampeonato);
+                                if(usuarioPontuacao != null){
+                                    usuarioPontuacao.setUsuario(usuario);
+                                    UsuarioPontuacaoService.alterar(usuarioPontuacao, idCampeonato);
+                                } else {
+                                    UsuarioPontuacao usuarioPontuacaoNovo = new UsuarioPontuacao();
+                                    usuarioPontuacaoNovo.setUsuario(usuario);
+                                    UsuarioPontuacaoService.salvar(usuarioPontuacaoNovo, idCampeonato);
+                                }
 
 
                             } else {

@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("Campeonatos");
         setSupportActionBar(toolbar);
 
-        slidingTabLayout = (SlidingTabLayout) findViewById(R.id.stl_tabs);
-        viewPager = (ViewPager) findViewById(R.id.vp_pagina);
+        slidingTabLayout = findViewById(R.id.stl_tabs);
+        viewPager = findViewById(R.id.vp_pagina);
 
         //Configurar sliding tabs
         slidingTabLayout.setDistributeEvenly(true);

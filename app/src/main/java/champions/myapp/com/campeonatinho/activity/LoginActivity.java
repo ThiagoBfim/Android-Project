@@ -76,19 +76,9 @@ public class LoginActivity extends AppCompatActivity {
                         databaseReference = ConfiguracaoFirebase.getFirebase().child("usuarios")
                                 .child(Base64Util.codificarBase64(usuario.getEmail()));
 
-                        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Preferencias preferencias = new Preferencias(LoginActivity.this);
-                                Usuario usuarioRetrived = dataSnapshot.getValue(Usuario.class);
-                                preferencias.salvarDados(usuarioRetrived.getId(), usuarioRetrived.getNome());
-                            }
+                        Preferencias preferencias = new Preferencias(LoginActivity.this);
+                        preferencias.salvarDados(Base64Util.codificarBase64(usuario.getEmail()));
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
                         abrirTelaPrincipal();
                         Toast.makeText(LoginActivity.this, "Sucesso ao fazer login!", Toast.LENGTH_LONG).show();
                     } else {
