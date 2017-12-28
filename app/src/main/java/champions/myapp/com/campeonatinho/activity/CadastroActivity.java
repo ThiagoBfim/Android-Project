@@ -87,7 +87,7 @@ public class CadastroActivity extends AppCompatActivity {
                     UsuarioService.salvar(usuario);
 
                     Preferencias preferencias = new Preferencias(CadastroActivity.this);
-                    preferencias.salvarDados(idUsuario);
+                    preferencias.salvarDados(usuario);
 
                     abrirLoginUsuario();
 

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import champions.myapp.com.campeonatinho.activity.fragment.CampeonatoFragment;
+import champions.myapp.com.campeonatinho.activity.fragment.ParticipantesFragment;
 import champions.myapp.com.campeonatinho.model.enuns.TituloAbas;
 
 public class TabAdapter extends FragmentStatePagerAdapter {
@@ -23,10 +24,10 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
         switch (position){
             case 0:
-                fragment = new CampeonatoFragment(tituloAbas[position]);
+                fragment = new CampeonatoFragment();
                 break;
             case 1:
-                fragment = new CampeonatoFragment(tituloAbas[position]);
+                fragment = new ParticipantesFragment();
                 break;
         }
 

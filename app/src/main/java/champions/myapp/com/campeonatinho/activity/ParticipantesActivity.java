@@ -33,6 +33,8 @@ import champions.myapp.com.campeonatinho.activity.view.PontuacaoLayout;
 import champions.myapp.com.campeonatinho.adapter.ParticipanteAdapter;
 import champions.myapp.com.campeonatinho.config.ConfiguracaoFirebase;
 import champions.myapp.com.campeonatinho.helper.Base64Util;
+import champions.myapp.com.campeonatinho.helper.Preferencias;
+import champions.myapp.com.campeonatinho.model.Campeonato;
 import champions.myapp.com.campeonatinho.model.Usuario;
 import champions.myapp.com.campeonatinho.model.UsuarioPontuacao;
 import champions.myapp.com.campeonatinho.service.UsuarioPontuacaoService;
@@ -47,6 +49,8 @@ public class ParticipantesActivity extends AppCompatActivity {
     private List<UsuarioPontuacao> usuarioPontuacaos = new ArrayList<>();
     private ArrayAdapter<UsuarioPontuacao> adapter;
     private String idCampeonato;
+    private String nomeCampeonato;
+    private List<String> idCampeonatos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +60,6 @@ public class ParticipantesActivity extends AppCompatActivity {
         usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao();
         toolbar = findViewById(R.id.toolbar);
         Bundle extra = getIntent().getExtras();
-        String nomeCampeonato = "";
         if (extra != null) {
             nomeCampeonato = extra.getString("nome");
             idCampeonato = extra.getString("campeonatoId");
@@ -77,8 +80,10 @@ public class ParticipantesActivity extends AppCompatActivity {
             }
         });
 
-        firebase = UsuarioPontuacaoService.getUsuarioPontuacaoDataBaseReference(idCampeonato);
-        contatosEvent = getValueContatoEventListener();
+        Preferencias preferencias = new Preferencias(ParticipantesActivity.this);
+        String identificadorLogado = preferencias.getIdentificador();
+        firebase = UsuarioPontuacaoService.getAllCampeonato();
+        contatosEvent = getValueUsuarioPontuacaoEventListener();
     }
 
     @Override
@@ -147,7 +152,9 @@ public class ParticipantesActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
                 String emailParticipante = participanteLayout.getNomeText().getText().toString();
-
+                if(usuarioPontuacao != null){
+                    emailParticipante = usuarioPontuacao.getUsuario().getEmail();
+                }
                 //Valida se o nome foi digitado
                 if (emailParticipante.isEmpty()) {
                     Toast.makeText(ParticipantesActivity.this, "Preencha o e-mail do participante", Toast.LENGTH_LONG).show();
@@ -166,15 +173,20 @@ public class ParticipantesActivity extends AppCompatActivity {
 
                                 //Recuperar dados do contato a ser adicionado
                                 Usuario usuario = dataSnapshot.getValue(Usuario.class);
+                                usuario.setId(dataSnapshot.getKey());
 
 
                                 if(usuarioPontuacao != null){
                                     usuarioPontuacao.setUsuario(usuario);
-                                    UsuarioPontuacaoService.alterar(usuarioPontuacao, idCampeonato);
+                                    UsuarioPontuacaoService.alterar(usuarioPontuacao, idCampeonato, usuario.getId());
                                 } else {
                                     UsuarioPontuacao usuarioPontuacaoNovo = new UsuarioPontuacao();
                                     usuarioPontuacaoNovo.setUsuario(usuario);
-                                    UsuarioPontuacaoService.salvar(usuarioPontuacaoNovo, idCampeonato);
+                                    Campeonato campeonato = new Campeonato();
+                                    campeonato.setId(idCampeonato);
+                                    campeonato.setNome(nomeCampeonato);
+                                    usuarioPontuacaoNovo.setCampeonato(campeonato);
+                                    UsuarioPontuacaoService.salvar(usuarioPontuacaoNovo, idCampeonato, usuario.getId());
                                 }
 
 
@@ -199,7 +211,9 @@ public class ParticipantesActivity extends AppCompatActivity {
             alertDialog.setNeutralButton("Excluir", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    UsuarioPontuacaoService.remover(usuarioPontuacao, idCampeonato);
+                    Preferencias preferencias = new Preferencias(ParticipantesActivity.this);
+                    String identificadorLogado = preferencias.getIdentificador();
+                    UsuarioPontuacaoService.remover(usuarioPontuacao, idCampeonato,identificadorLogado);
                 }
             });
         }
@@ -227,19 +241,27 @@ public class ParticipantesActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private ValueEventListener getValueContatoEventListener() {
+    private ValueEventListener getValueUsuarioPontuacaoEventListener() {
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                //Limpar lista
                 usuarioPontuacaos.clear();
+
+                Preferencias preferencias = new Preferencias(ParticipantesActivity.this);
+                String identificadorLogado = preferencias.getIdentificador();
 
                 //Listar contatos
                 for (DataSnapshot dados : dataSnapshot.getChildren()) {
-                    UsuarioPontuacao usuarioPontuacao = dados.getValue(UsuarioPontuacao.class);
-                    usuarioPontuacao.setId(dados.getKey());
-                    usuarioPontuacaos.add(usuarioPontuacao);
+                        for (DataSnapshot campeonatos : dados.getChildren()) {
+                            String idCampeonatoRetrived = campeonatos.getKey();
+                            if(idCampeonato.equals(idCampeonatoRetrived)) {
+                                for (DataSnapshot usuPontuacao : campeonatos.getChildren()) {
+                                    UsuarioPontuacao usuarioPontuacao = usuPontuacao.getValue(UsuarioPontuacao.class);
+                                    usuarioPontuacao.setId(usuPontuacao.getKey());
+                                    usuarioPontuacaos.add(usuarioPontuacao);
+                                }
+                            }
+                        }
                 }
 
                 adapter.notifyDataSetChanged();

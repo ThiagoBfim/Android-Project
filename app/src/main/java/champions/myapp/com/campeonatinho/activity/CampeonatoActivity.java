@@ -30,6 +30,7 @@ import champions.myapp.com.campeonatinho.R;
 import champions.myapp.com.campeonatinho.activity.view.PontuacaoLayout;
 import champions.myapp.com.campeonatinho.adapter.PontuacaoAdapter;
 import champions.myapp.com.campeonatinho.config.ConfiguracaoFirebase;
+import champions.myapp.com.campeonatinho.helper.Preferencias;
 import champions.myapp.com.campeonatinho.model.Pontuacao;
 import champions.myapp.com.campeonatinho.service.PontuacaoService;
 import champions.myapp.com.campeonatinho.service.UsuarioPontuacaoService;
@@ -183,7 +184,10 @@ public class CampeonatoActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     PontuacaoService.remover(pontuacao, idCampeonato);
-                    UsuarioPontuacaoService.removerPontuacao(pontuacao, idCampeonato);
+
+                    Preferencias preferencias = new Preferencias(CampeonatoActivity.this);
+                    String identificadorLogado = preferencias.getIdentificador();
+                    UsuarioPontuacaoService.removerPontuacao(pontuacao, idCampeonato, identificadorLogado);
                 }
             });
         }

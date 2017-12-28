@@ -19,41 +19,43 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import champions.myapp.com.campeonatinho.R;
-import champions.myapp.com.campeonatinho.activity.CampeonatoActivity;
+import champions.myapp.com.campeonatinho.activity.ParticipantesActivity;
 import champions.myapp.com.campeonatinho.adapter.CampeonatoAdapter;
 import champions.myapp.com.campeonatinho.helper.Preferencias;
 import champions.myapp.com.campeonatinho.model.Campeonato;
-import champions.myapp.com.campeonatinho.service.CampeonatoService;
+import champions.myapp.com.campeonatinho.model.UsuarioPontuacao;
+import champions.myapp.com.campeonatinho.service.UsuarioPontuacaoService;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CampeonatoFragment extends Fragment {
+public class ParticipantesFragment extends Fragment {
 
     private ListView listView;
     private ArrayAdapter adapter;
     private ArrayList<Campeonato> campeonatoes = new ArrayList<>();
     private DatabaseReference firebase;
-    private ValueEventListener campeonatoEvent;
+    private ValueEventListener usuarioPontuacaoEvent;
+    private List<String> idCampeonatos = new ArrayList<>();
 
-    public CampeonatoFragment() {
+    public ParticipantesFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onStart() {
         super.onStart();
-        firebase.addValueEventListener(campeonatoEvent);
+        firebase.addValueEventListener(usuarioPontuacaoEvent);
         Log.i("ValueEventListener", "OnStart");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        firebase.removeEventListener(campeonatoEvent);
+        firebase.removeEventListener(usuarioPontuacaoEvent);
         Log.i("ValueEventListener", "OnStop");
     }
 
@@ -64,12 +66,8 @@ public class CampeonatoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_campeonato, container, false);
         listView = view.findViewById(R.id.lv_campeonato);
 
-        Preferencias preferencias = new Preferencias(getActivity());
-        String identificadorLogado = preferencias.getIdentificador();
-        firebase = CampeonatoService.getCampeonatosDataBaseReference(identificadorLogado);
-        campeonatoEvent = getValueCampeonatoEventListener();
-
-
+        firebase = UsuarioPontuacaoService.getAllCampeonato();
+        usuarioPontuacaoEvent = getValueUsuarioPontuacaoEventListener();
         adapter = new CampeonatoAdapter(getActivity(), campeonatoes);
 
         listView.setAdapter(adapter);
@@ -78,7 +76,8 @@ public class CampeonatoFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), CampeonatoActivity.class);
+                Intent intent = new Intent(getActivity(), ParticipantesActivity.class);
+
                 Campeonato campeonato = campeonatoes.get(position);
                 intent.putExtra("nome", campeonato.getNome());
                 intent.putExtra("campeonatoId", campeonato.getId());
@@ -91,19 +90,32 @@ public class CampeonatoFragment extends Fragment {
     }
 
     @NonNull
-    private ValueEventListener getValueCampeonatoEventListener() {
+    private ValueEventListener getValueUsuarioPontuacaoEventListener() {
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 campeonatoes.clear();
 
+
+                Preferencias preferencias = new Preferencias(getActivity());
+                String identificadorLogado = preferencias.getIdentificador();
+
                 //Listar contatos
                 for (DataSnapshot dados : dataSnapshot.getChildren()) {
-                    Campeonato campeonato = dados.getValue(Campeonato.class);
-                    campeonato.setId(dados.getKey());
-                    campeonatoes.add(campeonato);
+                    String idUsuario = dados.getKey();
+                    if (idUsuario.equals(identificadorLogado)) {
+                        for (DataSnapshot campeonatos : dados.getChildren()) {
+                            String idCampeonato = campeonatos.getKey();
+                            if(idUsuario.equals(identificadorLogado) || idCampeonatos.contains(idCampeonato)) {
+                                idCampeonatos.add(idCampeonato);
+                                for (DataSnapshot usuPontuacao : campeonatos.getChildren()) {
+                                    UsuarioPontuacao usuarioPontuacao = usuPontuacao.getValue(UsuarioPontuacao.class);
+                                    campeonatoes.add(usuarioPontuacao.getCampeonato());
+                                }
+                            }
+                        }
+                    }
                 }
-
 
                 adapter.notifyDataSetChanged();
             }

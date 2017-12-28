@@ -23,6 +23,7 @@ import champions.myapp.com.campeonatinho.config.ConfiguracaoFirebase;
 import champions.myapp.com.campeonatinho.helper.Base64Util;
 import champions.myapp.com.campeonatinho.helper.Preferencias;
 import champions.myapp.com.campeonatinho.model.Usuario;
+import champions.myapp.com.campeonatinho.service.UsuarioService;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -31,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button botaoLogar;
     private Usuario usuario;
     private FirebaseAuth autenticacao;
+    private ValueEventListener valueEventListenerUsuario;
     private DatabaseReference databaseReference;
 
     @Override
@@ -76,10 +78,26 @@ public class LoginActivity extends AppCompatActivity {
                         databaseReference = ConfiguracaoFirebase.getFirebase().child("usuarios")
                                 .child(Base64Util.codificarBase64(usuario.getEmail()));
 
-                        Preferencias preferencias = new Preferencias(LoginActivity.this);
-                        preferencias.salvarDados(Base64Util.codificarBase64(usuario.getEmail()));
 
-                        abrirTelaPrincipal();
+                        valueEventListenerUsuario = new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Usuario usuario = dataSnapshot.getValue(Usuario.class);
+                                usuario.setId(dataSnapshot.getKey());
+                                Preferencias preferencias = new Preferencias(LoginActivity.this);
+                                preferencias.salvarDados(usuario);
+                                abrirTelaPrincipal();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        };
+                        databaseReference = UsuarioService.retrieveUsuarioById(Base64Util.codificarBase64(usuario.getEmail()));
+                        databaseReference.addListenerForSingleValueEvent(valueEventListenerUsuario);
+
+
                         Toast.makeText(LoginActivity.this, "Sucesso ao fazer login!", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(LoginActivity.this, "Erro ao fazer login!", Toast.LENGTH_LONG).show();

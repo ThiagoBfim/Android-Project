@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import champions.myapp.com.campeonatinho.R;
 import champions.myapp.com.campeonatinho.adapter.TabAdapter;
@@ -22,7 +25,10 @@ import champions.myapp.com.campeonatinho.config.ConfiguracaoFirebase;
 import champions.myapp.com.campeonatinho.helper.Preferencias;
 import champions.myapp.com.campeonatinho.helper.SlidingTabLayout;
 import champions.myapp.com.campeonatinho.model.Campeonato;
+import champions.myapp.com.campeonatinho.model.Usuario;
+import champions.myapp.com.campeonatinho.model.UsuarioPontuacao;
 import champions.myapp.com.campeonatinho.service.CampeonatoService;
+import champions.myapp.com.campeonatinho.service.UsuarioPontuacaoService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -112,8 +118,7 @@ public class MainActivity extends AppCompatActivity {
                     Campeonato campeonato = new Campeonato();
                     Preferencias preferencias = new Preferencias(MainActivity.this);
                     campeonato.setNome(nomeCampeonato);
-                    CampeonatoService.salvar(campeonato, preferencias.getIdentificador());
-
+                    CampeonatoService.salvar(campeonato, preferencias);
                 }
 
             }

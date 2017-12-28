@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -49,10 +50,13 @@ public class ParticipanteLayout extends LinearLayout {
         setOrientation(LinearLayout.VERTICAL);
 
         nomeText = new EditText(context);
-        nomeText.setHint("E-mail do usuário");
-        addView(nomeText);
 
         if(usuarioPontuacao != null){
+            final TextView emailText = new TextView(context);
+            emailText.setText(usuarioPontuacao.getUsuario().getEmail());
+            emailText.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+            addView(emailText);
+
             listView = new ListView(context);
             adapter = new UsuarioPontuacaoAdapter(context, pontuacoes, usuarioPontuacao);
             listView.setAdapter(adapter);
@@ -61,7 +65,10 @@ public class ParticipanteLayout extends LinearLayout {
             firebase = PontuacaoService.getPontuacaoDataBaseReference(idCampeonato);
             contatosEvent = getValueContatoEventListener();
             firebase.addValueEventListener(contatosEvent);
-            nomeText.setText(usuarioPontuacao.getUsuario().getEmail());
+
+        } else {
+            nomeText.setHint("E-mail do usuário");
+            addView(nomeText);
         }
 
     }

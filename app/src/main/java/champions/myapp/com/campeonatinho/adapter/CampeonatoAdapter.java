@@ -34,16 +34,18 @@ public class CampeonatoAdapter extends ArrayAdapter<Campeonato> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = null;
 
-        if(contatos != null){
-            Campeonato contato = contatos.get(position);
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        if(contatos != null && !contatos.isEmpty() ){
+            Campeonato campeonato = contatos.get(position);
+            if(campeonato != null) {
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
-            view = inflater.inflate(R.layout.lista_pontos, parent, false);
-            TextView nomeContato = (TextView) view.findViewById(R.id.tv_title);
-            nomeContato.setText(contato.getNome());
+                view = inflater.inflate(R.layout.lista_pontos, parent, false);
+                TextView title = view.findViewById(R.id.tv_title);
+                title.setText(campeonato.getNome());
 
-            TextView emailContato = (TextView) view.findViewById(R.id.tv_subTtitle);
-            emailContato.setText(contato.getNome());
+                TextView subTitle = view.findViewById(R.id.tv_subTtitle);
+                subTitle.setText(campeonato.getNome());
+            }
 
 
 

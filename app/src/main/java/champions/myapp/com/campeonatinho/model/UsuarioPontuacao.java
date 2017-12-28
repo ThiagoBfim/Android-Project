@@ -11,6 +11,7 @@ public class UsuarioPontuacao {
 
     private String id;
     private Usuario usuario;
+    private Campeonato campeonato;
     private List<Pontuacao> pontuacoes = new ArrayList<>();
     private Integer qtdTotalPontos = 0;
 
@@ -51,5 +52,13 @@ public class UsuarioPontuacao {
 
     public void setQtdTotalPontos(Integer qtdTotalPontos) {
         this.qtdTotalPontos = qtdTotalPontos;
+    }
+
+    public Campeonato getCampeonato() {
+        return campeonato;
+    }
+
+    public void setCampeonato(Campeonato campeonato) {
+        this.campeonato = campeonato;
     }
 }
