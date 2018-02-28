@@ -20,10 +20,16 @@ public class UsuarioPontuacaoService {
         referenciaFirebase.child("usuarioPontuacao").child(identificadorLogado).child(idCampeonato).push().setValue( usuarioPontuacao );
     }
 
-    public static void remover(UsuarioPontuacao usuarioPontuacaos, String idCampeonato, String identificadorLogado) {
+    public static void remover(String usuarioPontuacaosCod, String idCampeonato, String identificadorLogado) {
         DatabaseReference referenciaFirebase = ConfiguracaoFirebase.getFirebase();
         referenciaFirebase.child("usuarioPontuacao").child(identificadorLogado)
-                .child(idCampeonato).child(usuarioPontuacaos.getId()).removeValue();
+                .child(idCampeonato).child(usuarioPontuacaosCod).removeValue();
+    }
+
+    public static void removerAll(String idCampeonato, String identificadorLogado) {
+        DatabaseReference referenciaFirebase = ConfiguracaoFirebase.getFirebase();
+        referenciaFirebase.child("usuarioPontuacao").child(identificadorLogado)
+                .child(idCampeonato).removeValue();
     }
 
     public static DatabaseReference getUsuarioPontuacaoDataBaseReference(String idCampeonato, String identificadorLogado) {
@@ -55,7 +61,7 @@ public class UsuarioPontuacaoService {
 
                    if(usuarioPontuacao.getPontuacoes().contains(pontuacao)){
                        usuarioPontuacao.getPontuacoes().remove(pontuacao);
-                       remover(usuarioPontuacao, idCampeonato, identificadorLogado);
+                       remover(usuarioPontuacao.getId(), idCampeonato, identificadorLogado);
                    }
                 }
             }

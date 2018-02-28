@@ -37,6 +37,7 @@ import champions.myapp.com.campeonatinho.helper.Preferencias;
 import champions.myapp.com.campeonatinho.model.Campeonato;
 import champions.myapp.com.campeonatinho.model.Usuario;
 import champions.myapp.com.campeonatinho.model.UsuarioPontuacao;
+import champions.myapp.com.campeonatinho.service.CampeonatoService;
 import champions.myapp.com.campeonatinho.service.UsuarioPontuacaoService;
 
 public class ParticipantesActivity extends AppCompatActivity {
@@ -81,7 +82,6 @@ public class ParticipantesActivity extends AppCompatActivity {
         });
 
         Preferencias preferencias = new Preferencias(ParticipantesActivity.this);
-        String identificadorLogado = preferencias.getIdentificador();
         firebase = UsuarioPontuacaoService.getAllCampeonato();
         contatosEvent = getValueUsuarioPontuacaoEventListener();
     }
@@ -124,9 +124,23 @@ public class ParticipantesActivity extends AppCompatActivity {
             case R.id.item_adicionar_pessoa:
                 abrirCadastroPessoa(null);
                 return true;
+            case R.id.item_remover_campeonato :
+                removerCampeonato();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void removerCampeonato() {
+        Campeonato campeonato = new Campeonato();
+        campeonato.setId(idCampeonato);
+        campeonato.setNome(nomeCampeonato);
+        Preferencias preferencias = new Preferencias(ParticipantesActivity.this);
+        CampeonatoService.remover(campeonato, preferencias);
+        Intent intent = new Intent(ParticipantesActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void abrirCadastroPessoa(final UsuarioPontuacao usuarioPontuacao) {
@@ -213,7 +227,7 @@ public class ParticipantesActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     Preferencias preferencias = new Preferencias(ParticipantesActivity.this);
                     String identificadorLogado = preferencias.getIdentificador();
-                    UsuarioPontuacaoService.remover(usuarioPontuacao, idCampeonato,identificadorLogado);
+                    UsuarioPontuacaoService.remover(usuarioPontuacao.getId(), idCampeonato,identificadorLogado);
                 }
             });
         }

@@ -31,7 +31,9 @@ import champions.myapp.com.campeonatinho.activity.view.PontuacaoLayout;
 import champions.myapp.com.campeonatinho.adapter.PontuacaoAdapter;
 import champions.myapp.com.campeonatinho.config.ConfiguracaoFirebase;
 import champions.myapp.com.campeonatinho.helper.Preferencias;
+import champions.myapp.com.campeonatinho.model.Campeonato;
 import champions.myapp.com.campeonatinho.model.Pontuacao;
+import champions.myapp.com.campeonatinho.service.CampeonatoService;
 import champions.myapp.com.campeonatinho.service.PontuacaoService;
 import champions.myapp.com.campeonatinho.service.UsuarioPontuacaoService;
 
@@ -45,6 +47,7 @@ public class CampeonatoActivity extends AppCompatActivity {
     private List<Pontuacao> pontuacoes = new ArrayList<>();
     private ArrayAdapter<Pontuacao> adapter;
     private String idCampeonato;
+    private String nomeCampeonato;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,6 @@ public class CampeonatoActivity extends AppCompatActivity {
         usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao();
         toolbar = findViewById(R.id.toolbar);
         Bundle extra = getIntent().getExtras();
-        String nomeCampeonato = "";
         if (extra != null) {
             nomeCampeonato = extra.getString("nome");
             idCampeonato = extra.getString("campeonatoId");
@@ -118,9 +120,23 @@ public class CampeonatoActivity extends AppCompatActivity {
             case R.id.item_adicionar:
                 abrirCadastroCampeonato(null);
                 return true;
+            case R.id.item_remover_campeonato :
+                removerCampeonato();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void removerCampeonato() {
+        Campeonato campeonato = new Campeonato();
+        campeonato.setId(idCampeonato);
+        campeonato.setNome(nomeCampeonato);
+        Preferencias preferencias = new Preferencias(CampeonatoActivity.this);
+        CampeonatoService.remover(campeonato, preferencias);
+        Intent intent = new Intent(CampeonatoActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void abrirCadastroCampeonato(final Pontuacao pontuacao) {

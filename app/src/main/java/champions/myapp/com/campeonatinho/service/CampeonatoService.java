@@ -52,6 +52,13 @@ public class CampeonatoService {
                 });
     }
 
+    public static void remover(Campeonato campeonato, Preferencias preferencias) {
+        DatabaseReference referenciaFirebase = ConfiguracaoFirebase.getFirebase();
+        referenciaFirebase.child("campeonatos").child(preferencias.getIdentificador())
+                .child(campeonato.getId()).removeValue();
+        UsuarioPontuacaoService.removerAll(campeonato.getId(), preferencias.getIdentificador());
+    }
+
     public static DatabaseReference getCampeonatosDataBaseReference(String identificador) {
         DatabaseReference referenciaFirebase = ConfiguracaoFirebase.getFirebase();
         return referenciaFirebase.child("campeonatos").child(identificador);

@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         MenuItem item = menu.findItem(R.id.item_adicionar_pessoa);
         item.setVisible(false);
 
+        MenuItem itemExcluir = menu.findItem(R.id.item_remover_campeonato);
+        itemExcluir.setVisible(false);
         return true;
     }
 

@@ -13,16 +13,24 @@
         android:orderInCategory="200"
         app:showAsAction="never" />
 
+    <item android:id="@+id/item_remover_campeonato"
+        android:title="Remover Campeonato"
+        android:orderInCategory="300"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_delete_forever"/>
+
     <item android:id="@+id/item_adicionar"
         android:title="Adicionar"
-        android:orderInCategory="300"
+        android:orderInCategory="400"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_add"/>
 
     <item android:id="@+id/item_adicionar_pessoa"
         android:title="Adicionar Pessoa"
-        android:orderInCategory="400"
+        android:orderInCategory="500"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_person_add"/>
+
+
 
 </menu>
