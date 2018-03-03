@@ -47,7 +47,7 @@ public class CampeonatoActivity extends AppCompatActivity {
     private List<Pontuacao> pontuacoes = new ArrayList<>();
     private ArrayAdapter<Pontuacao> adapter;
     private String idCampeonato;
-    private String nomeCampeonato;
+    private String tituloCampeonato;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,23 +58,20 @@ public class CampeonatoActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
-            nomeCampeonato = extra.getString("nome");
+            tituloCampeonato = extra.getString("titulo");
             idCampeonato = extra.getString("campeonatoId");
         }
-        toolbar.setTitle(nomeCampeonato);
+        toolbar.setTitle(tituloCampeonato);
         setSupportActionBar(toolbar);
 
         listView = findViewById(R.id.lv_conversas);
         adapter = new PontuacaoAdapter(CampeonatoActivity.this, pontuacoes);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Pontuacao pontuacao = pontuacoes.get(position);
-                abrirCadastroCampeonato(pontuacao);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Pontuacao pontuacao = pontuacoes.get(position);
+            abrirCadastroCampeonato(pontuacao);
 
-            }
         });
 
         firebase = PontuacaoService.getPontuacaoDataBaseReference(idCampeonato);
@@ -131,7 +128,7 @@ public class CampeonatoActivity extends AppCompatActivity {
     private void removerCampeonato() {
         Campeonato campeonato = new Campeonato();
         campeonato.setId(idCampeonato);
-        campeonato.setNome(nomeCampeonato);
+        campeonato.setTitulo(tituloCampeonato);
         Preferencias preferencias = new Preferencias(CampeonatoActivity.this);
         CampeonatoService.remover(campeonato, preferencias);
         Intent intent = new Intent(CampeonatoActivity.this, MainActivity.class);
@@ -157,42 +154,39 @@ public class CampeonatoActivity extends AppCompatActivity {
         alertDialog.setCancelable(false);
 
         //Configura botões
-        alertDialog.setPositiveButton(labelButton, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        alertDialog.setPositiveButton(labelButton, (dialog, which) -> {
 
-                String descricaoPontuacao = pontuacaoView.getDescricaoText().getText().toString();
-                String qtdPontosText = pontuacaoView.getPontuacaoText().getText().toString();
+            String descricaoPontuacao = pontuacaoView.getDescricaoText().getText().toString();
+            String qtdPontosText = pontuacaoView.getPontuacaoText().getText().toString();
 
-                //Valida se o nome foi digitado
-                if( descricaoPontuacao.isEmpty() ){
-                    Toast.makeText(CampeonatoActivity.this, "Preencha a descrição da pontuação", Toast.LENGTH_LONG).show();
-                }else{
-                    if(qtdPontosText.isEmpty()){
-                        Toast.makeText(CampeonatoActivity.this, "Preencha a quantidade de pontos", Toast.LENGTH_LONG).show();
-                    } else {
-                        Integer qtdPontos = 0;
-                        try {
-                            qtdPontos = Integer.valueOf(qtdPontosText);
-                        } catch (NumberFormatException e) {
-                            Log.e("Erro ao criar pontuacao", e.getMessage());
-                            Toast.makeText(CampeonatoActivity.this, "Quantidade de pontos precisa ser numerica.", Toast.LENGTH_LONG).show();
-                        }
-                        //Salvar instância Firebase
-                        Pontuacao pontuacaoNova = new Pontuacao();
-                        pontuacaoNova.setDescricao(descricaoPontuacao);
-                        pontuacaoNova.setQtdPontosFixo(qtdPontos);
-                        if (pontuacao != null) {
-                            pontuacaoNova.setId(pontuacao.getId());
-                            PontuacaoService.alterar(pontuacaoNova, idCampeonato);
-                        } else {
-                            PontuacaoService.salvar(pontuacaoNova, idCampeonato);
-                        }
+            //Valida se o nome foi digitado
+            if( descricaoPontuacao.isEmpty() ){
+                Toast.makeText(CampeonatoActivity.this, "Preencha a descrição da pontuação", Toast.LENGTH_LONG).show();
+            }else{
+                if(qtdPontosText.isEmpty()){
+                    Toast.makeText(CampeonatoActivity.this, "Preencha a quantidade de pontos", Toast.LENGTH_LONG).show();
+                } else {
+                    Integer qtdPontos = 0;
+                    try {
+                        qtdPontos = Integer.valueOf(qtdPontosText);
+                    } catch (NumberFormatException e) {
+                        Log.e("Erro ao criar pontuacao", e.getMessage());
+                        Toast.makeText(CampeonatoActivity.this, "Quantidade de pontos precisa ser numerica.", Toast.LENGTH_LONG).show();
                     }
-
+                    //Salvar instância Firebase
+                    Pontuacao pontuacaoNova = new Pontuacao();
+                    pontuacaoNova.setDescricao(descricaoPontuacao);
+                    pontuacaoNova.setQtdPontosFixo(qtdPontos);
+                    if (pontuacao != null) {
+                        pontuacaoNova.setId(pontuacao.getId());
+                        PontuacaoService.alterar(pontuacaoNova, idCampeonato);
+                    } else {
+                        PontuacaoService.salvar(pontuacaoNova, idCampeonato);
+                    }
                 }
 
             }
+
         });
 
         if(pontuacao != null) {

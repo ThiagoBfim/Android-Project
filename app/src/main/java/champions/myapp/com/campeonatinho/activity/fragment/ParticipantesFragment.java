@@ -73,17 +73,14 @@ public class ParticipantesFragment extends Fragment {
         listView.setAdapter(adapter);
 
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), ParticipantesActivity.class);
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+            Intent intent = new Intent(getActivity(), ParticipantesActivity.class);
 
-                Campeonato campeonato = campeonatoes.get(position);
-                intent.putExtra("nome", campeonato.getNome());
-                intent.putExtra("campeonatoId", campeonato.getId());
+            Campeonato campeonato = campeonatoes.get(position);
+            intent.putExtra("titulo", campeonato.getTitulo());
+            intent.putExtra("campeonatoId", campeonato.getId());
 
-                startActivity(intent);
-            }
+            startActivity(intent);
         });
 
         return view;

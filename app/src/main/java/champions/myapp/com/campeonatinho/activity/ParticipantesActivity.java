@@ -50,7 +50,7 @@ public class ParticipantesActivity extends AppCompatActivity {
     private List<UsuarioPontuacao> usuarioPontuacaos = new ArrayList<>();
     private ArrayAdapter<UsuarioPontuacao> adapter;
     private String idCampeonato;
-    private String nomeCampeonato;
+    private String tituloCampeonato;
     private List<String> idCampeonatos = new ArrayList<>();
 
     @Override
@@ -62,26 +62,22 @@ public class ParticipantesActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
-            nomeCampeonato = extra.getString("nome");
+            tituloCampeonato = extra.getString("titulo");
             idCampeonato = extra.getString("campeonatoId");
         }
-        toolbar.setTitle(nomeCampeonato);
+        toolbar.setTitle(tituloCampeonato);
         setSupportActionBar(toolbar);
 
         listView = findViewById(R.id.lv_conversas);
         adapter = new ParticipanteAdapter(ParticipantesActivity.this, usuarioPontuacaos);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UsuarioPontuacao pontuacao = usuarioPontuacaos.get(position);
-                abrirCadastroPessoa(pontuacao);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            UsuarioPontuacao pontuacao = usuarioPontuacaos.get(position);
+            abrirCadastroPessoa(pontuacao);
 
-            }
         });
 
-        Preferencias preferencias = new Preferencias(ParticipantesActivity.this);
         firebase = UsuarioPontuacaoService.getAllCampeonato();
         contatosEvent = getValueUsuarioPontuacaoEventListener();
     }
@@ -109,6 +105,9 @@ public class ParticipantesActivity extends AppCompatActivity {
         MenuItem item = menu.findItem(R.id.item_adicionar);
         item.setVisible(false);
 
+        MenuItem item2 = menu.findItem(R.id.item_remover_campeonato);
+        item2.setVisible(false);
+
         return true;
     }
 
@@ -124,23 +123,9 @@ public class ParticipantesActivity extends AppCompatActivity {
             case R.id.item_adicionar_pessoa:
                 abrirCadastroPessoa(null);
                 return true;
-            case R.id.item_remover_campeonato :
-                removerCampeonato();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void removerCampeonato() {
-        Campeonato campeonato = new Campeonato();
-        campeonato.setId(idCampeonato);
-        campeonato.setNome(nomeCampeonato);
-        Preferencias preferencias = new Preferencias(ParticipantesActivity.this);
-        CampeonatoService.remover(campeonato, preferencias);
-        Intent intent = new Intent(ParticipantesActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     private void abrirCadastroPessoa(final UsuarioPontuacao usuarioPontuacao) {
@@ -198,7 +183,7 @@ public class ParticipantesActivity extends AppCompatActivity {
                                     usuarioPontuacaoNovo.setUsuario(usuario);
                                     Campeonato campeonato = new Campeonato();
                                     campeonato.setId(idCampeonato);
-                                    campeonato.setNome(nomeCampeonato);
+                                    campeonato.setTitulo(tituloCampeonato);
                                     usuarioPontuacaoNovo.setCampeonato(campeonato);
                                     UsuarioPontuacaoService.salvar(usuarioPontuacaoNovo, idCampeonato, usuario.getId());
                                 }
@@ -222,21 +207,15 @@ public class ParticipantesActivity extends AppCompatActivity {
         });
 
         if(usuarioPontuacao != null) {
-            alertDialog.setNeutralButton("Excluir", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Preferencias preferencias = new Preferencias(ParticipantesActivity.this);
-                    String identificadorLogado = preferencias.getIdentificador();
-                    UsuarioPontuacaoService.remover(usuarioPontuacao.getId(), idCampeonato,identificadorLogado);
-                }
+            alertDialog.setNeutralButton("Excluir", (dialog, which) -> {
+                Preferencias preferencias = new Preferencias(ParticipantesActivity.this);
+                String identificadorLogado = preferencias.getIdentificador();
+                UsuarioPontuacaoService.remover(usuarioPontuacao.getId(), idCampeonato,identificadorLogado);
             });
         }
 
-        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        alertDialog.setNegativeButton("Cancelar", (dialog, which) -> {
 
-            }
         });
 
         alertDialog.create();

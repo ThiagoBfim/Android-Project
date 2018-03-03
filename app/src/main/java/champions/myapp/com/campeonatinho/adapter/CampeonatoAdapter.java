@@ -41,10 +41,10 @@ public class CampeonatoAdapter extends ArrayAdapter<Campeonato> {
 
                 view = inflater.inflate(R.layout.lista_pontos, parent, false);
                 TextView title = view.findViewById(R.id.tv_title);
-                title.setText(campeonato.getNome());
+                title.setText(campeonato.getTitulo());
 
                 TextView subTitle = view.findViewById(R.id.tv_subTtitle);
-                subTitle.setText(campeonato.getNome());
+                subTitle.setText(campeonato.getDescricao());
             }
 
 

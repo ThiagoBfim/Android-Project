@@ -7,7 +7,8 @@ package champions.myapp.com.campeonatinho.model;
 public class Campeonato {
 
     private String id;
-    private String nome;
+    private String titulo;
+    private String descricao;
 
     public Campeonato() {
     }
@@ -20,12 +21,20 @@ public class Campeonato {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     @Override

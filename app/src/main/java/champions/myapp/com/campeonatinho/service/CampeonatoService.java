@@ -28,7 +28,7 @@ public class CampeonatoService {
 
                         for (DataSnapshot dados: dataSnapshot.getChildren()){
                             Campeonato campeonatoRetrived = dados.getValue( Campeonato.class);
-                            if(campeonatoRetrived.getNome().equals(campeonato.getNome())){
+                            if(campeonatoRetrived.getTitulo().equals(campeonato.getTitulo())){
                                 UsuarioPontuacao usuarioPontuacao = new UsuarioPontuacao();
                                 campeonato.setId(dados.getKey());
                                 usuarioPontuacao.setCampeonato(campeonato);

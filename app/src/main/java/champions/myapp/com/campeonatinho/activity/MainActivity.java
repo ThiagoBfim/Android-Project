@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import champions.myapp.com.campeonatinho.R;
+import champions.myapp.com.campeonatinho.activity.view.CampeonatoLayout;
+import champions.myapp.com.campeonatinho.activity.view.PontuacaoLayout;
 import champions.myapp.com.campeonatinho.adapter.TabAdapter;
 import champions.myapp.com.campeonatinho.config.ConfiguracaoFirebase;
 import champions.myapp.com.campeonatinho.helper.Preferencias;
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao();
 
-        toolbar =  findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Campeonatos");
         setSupportActionBar(toolbar);
 
@@ -53,10 +55,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Configurar sliding tabs
         slidingTabLayout.setDistributeEvenly(true);
-        slidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(this,R.color.colorAccent));
+        slidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(this, R.color.colorAccent));
 
         //Configurar adapter
-        TabAdapter tabAdapter = new TabAdapter( getSupportFragmentManager() );
+        TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager());
         viewPager.setAdapter(tabAdapter);
 
         slidingTabLayout.setViewPager(viewPager);
@@ -79,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch ( item.getItemId() ){
-            case R.id.item_sair :
+        switch (item.getItemId()) {
+            case R.id.item_sair:
                 deslogarUsuario();
                 return true;
-            case R.id.item_configuracoes :
+            case R.id.item_configuracoes:
                 return true;
-            case R.id.item_adicionar :
+            case R.id.item_adicionar:
                 abrirCadastroCampeonato();
                 return true;
             default:
@@ -93,44 +95,40 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void abrirCadastroCampeonato(){
+    private void abrirCadastroCampeonato() {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
 
-        //Configurações do Dialog
         alertDialog.setTitle("Novo Campeonato");
-        alertDialog.setMessage("Nome do campeonato");
+        final CampeonatoLayout campeonatoLayout = new CampeonatoLayout(MainActivity.this);
+        alertDialog.setView(campeonatoLayout);
         alertDialog.setCancelable(false);
 
-        final EditText editText = new EditText(MainActivity.this);
-        alertDialog.setView( editText );
-
         //Configura botões
-        alertDialog.setPositiveButton("Cadastrar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        alertDialog.setPositiveButton("Cadastrar", (dialog, which) -> {
 
-                String nomeCampeonato = editText.getText().toString();
+            Campeonato campeonato = new Campeonato();
+            String titulo = campeonatoLayout.getTituloText().getText().toString();
+            String descricao = campeonatoLayout.getDescricaoText().getText().toString();
 
-                //Valida se o nome foi digitado
-                if( nomeCampeonato.isEmpty() ){
-                    Toast.makeText(MainActivity.this, "Preencha o nome", Toast.LENGTH_LONG).show();
-                }else{
-                    //Salvar instância Firebase
-                    Campeonato campeonato = new Campeonato();
-                    Preferencias preferencias = new Preferencias(MainActivity.this);
-                    campeonato.setNome(nomeCampeonato);
-                    CampeonatoService.salvar(campeonato, preferencias);
-                }
+            campeonato.setTitulo(titulo);
+            campeonato.setDescricao(descricao);
 
+            //Valida se o nome foi digitado
+            if (titulo.isEmpty()) {
+                Toast.makeText(MainActivity.this, "Preencha o titulo", Toast.LENGTH_LONG).show();
+            } else if (descricao.isEmpty()) {
+                Toast.makeText(MainActivity.this, "Preencha a descricao", Toast.LENGTH_LONG).show();
+            } else {
+                //Salvar instância Firebase
+                Preferencias preferencias = new Preferencias(MainActivity.this);
+                CampeonatoService.salvar(campeonato, preferencias);
             }
+
         });
 
-        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        alertDialog.setNegativeButton("Cancelar", (dialog, which) -> {
 
-            }
         });
 
         alertDialog.create();
@@ -139,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void deslogarUsuario(){
+    public void deslogarUsuario() {
 
         usuarioFirebase.signOut();
 

@@ -50,6 +50,9 @@ public class UsuarioPontuacaoAdapter extends ArrayAdapter<Pontuacao> {
             final TextView pontoDescricao = view.findViewById(R.id.tv_descricao);
             pontoDescricao.setText(ponto.getDescricao());
 
+            final TextView valorPonto = view.findViewById(R.id.valor_pt);
+            valorPonto.setText(String.valueOf(ponto.getQtdPontosFixo()));
+
             final TextView qtdPonto = view.findViewById(R.id.tv_pontos);
             qtdPonto.setText(String.valueOf(ponto.getQtdPontos()));
             Button addButton = view.findViewById(R.id.buttonAdd);
