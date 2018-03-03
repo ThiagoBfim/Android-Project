@@ -41,11 +41,11 @@ public class ParticipanteAdapter extends ArrayAdapter<UsuarioPontuacao> {
 
             view = inflater.inflate(R.layout.lista_pontos, parent, false);
 
-            TextView pontoDescricao = (TextView) view.findViewById(R.id.tv_title);
+            TextView pontoDescricao = view.findViewById(R.id.tv_title);
             pontoDescricao.setText(ponto.getUsuario().getNome());
 
-            TextView qtdPonto = (TextView) view.findViewById(R.id.tv_subTtitle);
-            qtdPonto.setText(String.valueOf(ponto.getQtdTotalPontos()));
+            TextView qtdPonto = view.findViewById(R.id.tv_subTtitle);
+            qtdPonto.setText(String.valueOf(ponto.getQtdTotalPontos()) + " ponto(s)");
 
         }
 

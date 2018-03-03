@@ -4,9 +4,6 @@ import android.content.Context;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import champions.myapp.com.campeonatinho.model.Campeonato;
-import champions.myapp.com.campeonatinho.model.Pontuacao;
-
 /**
  * Created by Usuario on 21/12/2017.
  */

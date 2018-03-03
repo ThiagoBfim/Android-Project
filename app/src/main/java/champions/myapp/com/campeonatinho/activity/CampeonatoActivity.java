@@ -11,8 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -190,15 +188,12 @@ public class CampeonatoActivity extends AppCompatActivity {
         });
 
         if(pontuacao != null) {
-            alertDialog.setNeutralButton("Excluir", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    PontuacaoService.remover(pontuacao, idCampeonato);
+            alertDialog.setNeutralButton("Excluir", (dialog, which) -> {
+                PontuacaoService.remover(pontuacao, idCampeonato);
 
-                    Preferencias preferencias = new Preferencias(CampeonatoActivity.this);
-                    String identificadorLogado = preferencias.getIdentificador();
-                    UsuarioPontuacaoService.removerPontuacao(pontuacao, idCampeonato, identificadorLogado);
-                }
+                Preferencias preferencias = new Preferencias(CampeonatoActivity.this);
+                String identificadorLogado = preferencias.getIdentificador();
+                UsuarioPontuacaoService.removerPontuacao(pontuacao, idCampeonato, identificadorLogado);
             });
         }
 

@@ -80,7 +80,7 @@ public class CampeonatoFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), CampeonatoActivity.class);
                 Campeonato campeonato = campeonatoes.get(position);
-                intent.putExtra("nome", campeonato.getTitulo());
+                intent.putExtra("titulo", campeonato.getTitulo());
                 intent.putExtra("campeonatoId", campeonato.getId());
 
                 startActivity(intent);

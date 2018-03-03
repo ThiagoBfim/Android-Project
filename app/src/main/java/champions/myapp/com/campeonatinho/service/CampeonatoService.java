@@ -26,9 +26,9 @@ public class CampeonatoService {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        for (DataSnapshot dados: dataSnapshot.getChildren()){
-                            Campeonato campeonatoRetrived = dados.getValue( Campeonato.class);
-                            if(campeonatoRetrived.getTitulo().equals(campeonato.getTitulo())){
+                        for (DataSnapshot dados: dataSnapshot.getChildren()) {
+                            Campeonato campeonatoRetrived = dados.getValue(Campeonato.class);
+                            if (campeonatoRetrived.getTitulo().equals(campeonato.getTitulo())) {
                                 UsuarioPontuacao usuarioPontuacao = new UsuarioPontuacao();
                                 campeonato.setId(dados.getKey());
                                 usuarioPontuacao.setCampeonato(campeonato);
@@ -36,13 +36,11 @@ public class CampeonatoService {
                                 usuario.setId(preferencias.getIdentificador());
                                 usuario.setNome(preferencias.getNome());
                                 usuario.setEmail(preferencias.getEmail());
+                                usuario.setEhAdm(Boolean.TRUE);
                                 usuarioPontuacao.setUsuario(usuario);
-                                referenciaFirebase.child("usuarioPontuacao").child(preferencias.getIdentificador())
-                                        .child(dados.getKey()).push().setValue( usuarioPontuacao );
+                                UsuarioPontuacaoService.salvar(usuarioPontuacao, dados.getKey(), preferencias.getIdentificador());
                             }
                         }
-
-
                     }
 
                     @Override

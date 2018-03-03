@@ -1,9 +1,6 @@
 package champions.myapp.com.campeonatinho.service;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import champions.myapp.com.campeonatinho.config.ConfiguracaoFirebase;
 import champions.myapp.com.campeonatinho.model.Usuario;
